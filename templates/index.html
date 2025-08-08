@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Programming Quiz{% endblock %}
+
+{% block content %}
+<div class="welcome-container">
+    <div class="quiz-card welcome-card">
+        <div class="quiz-header">
+            <i class="fas fa-code python-icon"></i>
+            <h1>Programming Quiz Challenge</h1>
+            <p class="subtitle">Test your programming knowledge across multiple languages</p>
+        </div>
+        
+        <form method="POST" action="{{ url_for('start_quiz') }}" class="topic-form">
+            <div class="topic-selection">
+                <h3>Choose Your Topic</h3>
+                <div class="topics-grid">
+                    {% for topic_key, topic_data in topics.items() %}
+                    <label class="topic-option">
+                        <input type="radio" name="topic" value="{{ topic_key }}" required>
+                        <div class="topic-card">
+                            <i class="{{ topic_data.icon }}"></i>
+                            <span class="topic-name">{{ topic_data.name }}</span>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <button type="submit" class="start-btn">
+                <span>Start Quiz</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

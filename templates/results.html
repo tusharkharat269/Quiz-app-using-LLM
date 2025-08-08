@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Results - {{ topic_info.name }} Quiz{% endblock %}
+
+{% block content %}
+<div class="results-container">
+    <div class="quiz-card results-card">
+        <div class="topic-badge">
+            <i class="{{ topic_info.icon }}"></i>
+            <span>{{ topic_info.name }} Quiz Results</span>
+        </div>
+        
+        <div class="results-header">
+            <div class="score-circle">
+                <div class="score-inner">
+                    <span class="score-number">{{ score }}</span>
+                    <span class="score-total">/ {{ total }}</span>
+                </div>
+            </div>
+            
+            <h2 class="results-title">Quiz Completed!</h2>
+            <p class="results-subtitle">
+                You scored {{ percentage|round|int }}% 
+                {% if percentage >= 80 %}
+                    - Excellent work! 🎉
+                {% elif percentage >= 60 %}
+                    - Good job! 👍
+                {% else %}
+                    - Keep practicing! 📚
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="detailed-results">
+            <h3>Detailed Results</h3>
+            {% for question in quiz_data %}
+            <div class="result-item {{ 'correct' if user_answers[loop.index0] == question.answer else 'incorrect' }}">
+                <div class="result-question">
+                    <span class="question-number">Q{{ loop.index }}</span>
+                    <span class="question-text">{{ question.question }}</span>
+                </div>
+                
+                <div class="result-answers">
+                    <div class="answer-row">
+                        <span class="answer-label">Your answer:</span>
+                        <span class="answer-text user-answer">
+                            {{ ['A', 'B', 'C', 'D'][user_answers[loop.index0]] }}. {{ question.options[user_answers[loop.index0]] }}
+                        </span>
+                    </div>
+                    
+                    {% if user_answers[loop.index0] != question.answer %}
+                    <div class="answer-row">
+                        <span class="answer-label">Correct answer:</span>
+                        <span class="answer-text correct-answer">
+                            {{ ['A', 'B', 'C', 'D'][question.answer] }}. {{ question.options[question.answer] }}
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="result-icon">
+                    {% if user_answers[loop.index0] == question.answer %}
+                        <i class="fas fa-check-circle"></i>
+                    {% else %}
+                        <i class="fas fa-times-circle"></i>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="form-actions">
+            <a href="{{ url_for('index') }}" class="retry-btn">
+                <i class="fas fa-redo"></i>
+                <span>Try Again</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
